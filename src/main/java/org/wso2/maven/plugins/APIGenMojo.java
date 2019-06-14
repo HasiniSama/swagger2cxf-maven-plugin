@@ -57,6 +57,9 @@ public class APIGenMojo extends AbstractMojo {
     @Parameter(required = true)
     private String inputSpec;
 
+    @Parameter(required = true)
+    private String packageName;
+
     @Parameter( defaultValue = "${project}", readonly = true )
     private MavenProject project;
 
@@ -67,9 +70,9 @@ public class APIGenMojo extends AbstractMojo {
         keepOnlySingleTagPerOperation(swagger);
         CodegenConfig config = new CxfCodeGen();
 
-        config.additionalProperties().put("invokerPackage", project.getArtifact().getArtifactId());
-        config.additionalProperties().put("apiPackage", project.getArtifact().getArtifactId());
-        config.additionalProperties().put("modelPackage", project.getArtifact().getArtifactId() + ".dto");
+        config.additionalProperties().put("invokerPackage", project.getArtifact().getArtifactId() + "." + packageName);
+        config.additionalProperties().put("apiPackage", project.getArtifact().getArtifactId() + "." + packageName);
+        config.additionalProperties().put("modelPackage", project.getArtifact().getArtifactId() + "." + packageName + ".dto");
 
 
         config.setOutputDir(output.getAbsolutePath());
