@@ -34,6 +34,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -60,6 +61,40 @@ public class APIGenMojo extends AbstractMojo {
     @Parameter( defaultValue = "${project}", readonly = true )
     private MavenProject project;
 
+    private int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+    private final String licenseHeaderJava =
+            "/*\n" +
+            " * Copyright (c) " + currentYear + ", WSO2 Inc. (http://www.wso2.org) All Rights Reserved.\n" +
+            " *\n" +
+            " * Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
+            " * you may not use this file except in compliance with the License.\n" +
+            " * You may obtain a copy of the License at\n" +
+            " *\n" +
+            " * http://www.apache.org/licenses/LICENSE-2.0\n" +
+            " *\n" +
+            " * Unless required by applicable law or agreed to in writing, software\n" +
+            " * distributed under the License is distributed on an \"AS IS\" BASIS,\n" +
+            " * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n" +
+            " * See the License for the specific language governing permissions and\n" +
+            " * limitations under the License.\n" +
+            " */";
+
+    private final String licenseHeaderXML = "" +
+            "<!--\n" +
+            "  ~ Copyright (c) " + currentYear + ", WSO2 Inc. (http://www.wso2.org) All Rights Reserved.\n" +
+            "  ~\n" +
+            "  ~ Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
+            "  ~ you may not use this file except in compliance with the License.\n" +
+            "  ~ You may obtain a copy of the License at\n" +
+            "  ~\n" +
+            "  ~ http://www.apache.org/licenses/LICENSE-2.0\n" +
+            "  ~\n" +
+            "  ~ Unless required by applicable law or agreed to in writing, software\n" +
+            "  ~ distributed under the License is distributed on an \"AS IS\" BASIS,\n" +
+            "  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n" +
+            "  ~ See the License for the specific language governing permissions and\n" +
+            "  ~ limitations under the License.\n" +
+            "  -->";
 
     public void execute()
             throws MojoExecutionException {
@@ -70,6 +105,8 @@ public class APIGenMojo extends AbstractMojo {
         config.additionalProperties().put("invokerPackage", project.getArtifact().getArtifactId());
         config.additionalProperties().put("apiPackage", project.getArtifact().getArtifactId());
         config.additionalProperties().put("modelPackage", project.getArtifact().getArtifactId() + ".dto");
+        config.additionalProperties().put("licenseHeaderJava", licenseHeaderJava);
+        config.additionalProperties().put("licenseHeaderXML", licenseHeaderXML);
 
 
         config.setOutputDir(output.getAbsolutePath());
