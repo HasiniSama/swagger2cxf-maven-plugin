@@ -82,10 +82,6 @@ public class CxfCodeGen extends JavaCXFServerCodegen {
         apiTemplateFiles.put("apiServiceFactory.mustache", ".java");
 
         supportingFiles.clear();
-        supportingFiles.add(new SupportingFile("ApiException.mustache",
-                                               (sourceFolder + File.separator + apiPackage).replace(".", java.io.File.separator), "ApiException.java"));
-        supportingFiles.add(new SupportingFile("ApiResponseMessage.mustache",
-                                               (sourceFolder + File.separator + apiPackage).replace(".", java.io.File.separator), "ApiResponseMessage.java"));
     }
 
     @Override
