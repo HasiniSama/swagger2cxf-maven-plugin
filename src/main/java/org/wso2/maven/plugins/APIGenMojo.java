@@ -26,6 +26,7 @@ import io.swagger.models.Operation;
 import io.swagger.models.Path;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
+import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -34,9 +35,14 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.PropertyResourceBundle;
 
 /**
  * Goal which touches a timestamp file.
@@ -57,6 +63,12 @@ public class APIGenMojo extends AbstractMojo {
      */
     @Parameter(required = true)
     private String inputSpec;
+
+    /**
+     * Location of the properties file containing swagger API name to JAVA class name mappings.
+     */
+    @Parameter
+    private String classMapping;
 
     @Parameter( defaultValue = "${project}", readonly = true )
     private MavenProject project;
@@ -108,6 +120,10 @@ public class APIGenMojo extends AbstractMojo {
         config.additionalProperties().put("licenseHeaderJava", licenseHeaderJava);
         config.additionalProperties().put("licenseHeaderXML", licenseHeaderXML);
 
+        HashMap<String, String> classMap = getClassMappings();
+        if (!classMap.isEmpty()) {
+            config.additionalProperties().put("classMapping", classMap);
+        }
 
         config.setOutputDir(output.getAbsolutePath());
 
@@ -141,6 +157,31 @@ public class APIGenMojo extends AbstractMojo {
                 }
             }
         }
+    }
+
+    private HashMap<String, String> getClassMappings() {
+
+        HashMap<String, String> classMap = new HashMap();
+        if (StringUtils.isNotBlank(classMapping)) {
+
+            PropertyResourceBundle resourceBundle;
+            try {
+                FileInputStream fis  = new FileInputStream(classMapping);
+                resourceBundle = new PropertyResourceBundle(fis);
+            } catch (IOException e) {
+                e.printStackTrace();
+
+                // Ignore class mapping if exception is thrown.
+                return classMap;
+            }
+            Enumeration<String> keys = resourceBundle.getKeys();
+            while (keys.hasMoreElements()) {
+                String key = keys.nextElement();
+                classMap.put(key, resourceBundle.getString(key));
+            }
+        }
+
+        return classMap;
     }
 
 }

@@ -27,6 +27,7 @@ import org.apache.commons.lang.WordUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -115,9 +116,18 @@ public class CxfCodeGen extends JavaCXFServerCodegen {
 
     @Override
     public String toApiName(String name) {
-        name = name.replace('-' ,' ');
-        name = WordUtils.capitalize(name);
-        name = name.replaceAll("\\s","");
+
+        if (additionalProperties.get("classMapping") != null) {
+            HashMap<String, String> classMapping = (HashMap<String, String>) additionalProperties.get("classMapping");
+            if (classMapping.containsKey(name)) {
+                name = classMapping.get(name);
+            }
+        } else {
+            name = name.replace('-', ' ');
+            name = WordUtils.capitalize(name);
+            name = name.replaceAll("\\s", "");
+        }
+
         name = super.toApiName(name);
         return name;
     }
