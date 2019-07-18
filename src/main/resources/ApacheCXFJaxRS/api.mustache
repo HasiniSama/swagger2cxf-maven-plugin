@@ -2,6 +2,7 @@
 
 package {{package}};
 
+import org.springframework.beans.factory.annotation.Autowired;
 import {{modelPackage}}.*;
 import {{package}}.{{classname}}Service;
 import {{package}}.factories.{{classname}}ServiceFactory;
@@ -27,7 +28,8 @@ import javax.ws.rs.*;
 {{#operations}}
 public class {{classname}}  {
 
-   private final {{classname}}Service delegate = {{classname}}ServiceFactory.get{{classname}}();
+   @Autowired
+   private {{classname}}Service delegate;
 
 {{#operation}}
     @{{httpMethod}}
