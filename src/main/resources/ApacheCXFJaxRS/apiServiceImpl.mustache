@@ -17,13 +17,19 @@ import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import javax.ws.rs.core.Response;
 
 {{#operations}}
+/**
+* Implementation of {{classname}} Service.
+*/
 public class {{classname}}ServiceImpl extends {{classname}}Service {
+
 {{#operation}}
     @Override
-    public Response {{nickname}}({{#allParams}}{{>serviceQueryParams}}{{>servicePathParams}}{{>serviceHeaderParams}}{{>serviceBodyParams}}{{>serviceFormParams}}{{#hasMore}},{{/hasMore}}{{/allParams}}){
+    public Response {{nickname}}({{#allParams}}{{>serviceQueryParams}}{{>servicePathParams}}{{>serviceHeaderParams}}{{>serviceBodyParams}}{{>serviceFormParams}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) {
+
         // do some magic!
         return Response.ok().entity("magic!").build();
     }
+
 {{/operation}}
 }
 {{/operations}}
