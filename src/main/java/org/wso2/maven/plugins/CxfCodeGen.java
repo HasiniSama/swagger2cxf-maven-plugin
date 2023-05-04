@@ -92,12 +92,12 @@ public class CxfCodeGen extends JavaCXFServerCodegen {
 
         //generate the Impl in main directory
         if (templateName.endsWith("Impl.mustache")) {
-            String split[] = result.split(File.separator);
+            String split[] = result.split("[/\\\\]");
             result = getMainDirectory() + File.separator + "impl" + File.separator + split[split.length -1];
         }
 
         if (templateName.endsWith("Factory.mustache")) {
-            String split[] = result.split(File.separator);
+            String split[] = result.split("[/\\\\]");
             result = getGenDirectory() + File.separator + "factories" + File.separator + split[split.length -1];
         }
 

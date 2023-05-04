@@ -23,6 +23,7 @@ import javax.validation.constraints.Pattern;
     })
 {{/discriminator}}
 @ApiModel(description = "{{{description}}}")
+{{#vendorExtensions.x-wso2-json-ignore-unknown}}@JsonIgnoreProperties(ignoreUnknown = true){{/vendorExtensions.x-wso2-json-ignore-unknown}}
 public class {{classname}}{{#parent}} extends {{{parent}}}{{/parent}} {
 {{#vars}}{{#isEnum}}
     public enum {{datatypeWithEnum}} {
